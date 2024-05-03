@@ -1,27 +1,24 @@
 // userController.js
-const User = require("../models/userModel");
+const { User, UserLogin, UserSignUp } = require("../models/userModel");
+
 const bcrypt = require("bcrypt");
 const jwt = require("jsonwebtoken");
 
 // Get all users
 exports.getAllUsers = async (req, res) => {
   try {
-    if (req.adminPrevillageEmail === "HammadAwanexample.com") {
-      // Find the user by email
-      const users = await User.find();
-      return res.json(users);
-    }
-
-    res.json({ message: "Beta ap ky pass admin creds nahii hai" });
+    const users = await User.find();
+    res.json(users);
   } catch (err) {
     res.status(500).json({ message: err.message });
   }
 };
 
-// Get a single user by ID
-exports.getUserById = async (req, res) => {
+// Get a single user by name
+exports.getUserByName = async (req, res) => {
+  const { customerName } = req.params;
   try {
-    const user = await User.findById(req.params.id);
+    const user = await User.findOne({ customerName });
     if (user) {
       res.json(user);
     } else {
@@ -32,24 +29,20 @@ exports.getUserById = async (req, res) => {
   }
 };
 
+
 // Create a new user
 exports.createUser = async (req, res) => {
-  const { name, email, phoneNumber, password } = req.body;
+  const { customerName, projectName, startDate, endDate, overdueDays } = req.body;
 
   try {
-    // Hash the password
-    const hashedPassword = await bcrypt.hash(password, 10);
-    // Create a new user instance with hashed password
     const user = new User({
-      name,
-      email,
-      phoneNumber,
-      password: hashedPassword,
-      pendingNotifications: [],
-      status: "Pending",
+      customerName,
+      projectName,
+      startDate,
+      endDate,
+      overdueDays,
     });
 
-    // Save the user to the database
     const newUser = await user.save();
     res.status(201).json(newUser);
   } catch (err) {
@@ -57,12 +50,46 @@ exports.createUser = async (req, res) => {
   }
 };
 
+// Update a user by name
+exports.updateUserByName = async (req, res) => {
+  const { customerName } = req.params;
+  try {
+    const user = await User.findOne({ customerName });
+    if (user) {
+      user.name = req.body.name || user.name;
+      user.email = req.body.email || user.email;
+      // Update other fields as needed
+      const updatedUser = await user.save();
+      res.json(updatedUser);
+    } else {
+      res.status(404).json({ message: "User not found" });
+    }
+  } catch (err) {
+    res.status(400).json({ message: err.message });
+  }
+};
+
+
+// Delete a user by name
+exports.deleteUser = async (req, res) => {
+  const { customerName } = req.params;
+  try {
+    const user = await User.findOneAndDelete({ customerName });
+    if (user) {
+      res.json({ message: "User deleted successfully" });
+    } else {
+      res.status(404).json({ message: "User not found" });
+    }
+  } catch (err) {
+    res.status(500).json({ message: err.message });
+  }
+};
 exports.loginUser = async (req, res) => {
   const { email, password } = req.body;
 
   try {
     // Find the user by email
-    const user = await User.findOne({ email });
+    const user = await UserSignUp.findOne({ email });
 
     // If user is not found, return 404
     if (!user) {
@@ -91,36 +118,34 @@ exports.loginUser = async (req, res) => {
   }
 };
 
-// Update a user by ID
-exports.updateUser = async (req, res) => {
-  try {
-    const user = await User.findById(req.params.id);
-    if (user) {
-      user.name = req.body.name || user.name;
-      user.email = req.body.email || user.email;
-      // Update other user properties here
+// Signup a new user
+exports.signupUser = async (req, res) => {
+  const { name, email, password } = req.body;
 
-      const updatedUser = await user.save();
-      res.json(updatedUser);
-    } else {
-      res.status(404).json({ message: "User not found" });
-    }
-  } catch (err) {
-    res.status(400).json({ message: err.message });
-  }
-};
-
-// Delete a user by ID
-exports.deleteUser = async (req, res) => {
   try {
-    const user = await User.findById(req.params.id);
-    if (user) {
-      await user.remove();
-      res.json({ message: "User deleted" });
-    } else {
-      res.status(404).json({ message: "User not found" });
+    // Check if the email already exists
+    const existingUser = await UserSignUp.findOne({ email });
+    if (existingUser) {
+      return res.status(400).json({ message: "Email already exists" });
     }
+
+    // Encrypt the password
+    const hashedPassword = await bcrypt.hash(password, 10); // 10 is the saltRounds parameter
+
+    // Create a new user with the hashed password
+    const newUser = new UserSignUp({
+      name,
+      email,
+      password: hashedPassword, // Use the hashed password
+    });
+
+    // Save the user to the database
+    await newUser.save();
+
+    res.status(201).json({ message: "User created successfully" });
   } catch (err) {
     res.status(500).json({ message: err.message });
   }
 };
+
+
