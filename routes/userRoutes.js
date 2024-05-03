@@ -4,23 +4,28 @@ const userController = require("../controllers/userController");
 
 const auth = require("../middleware/auth.middleware.js");
 
-// Get all users
+// Signup route
+router.post("/signup", userController.signupUser);
+
+// Login route
 router.post("/login", userController.loginUser);
+
+// Create a new user route (for regular user creation)
 router.post("/", userController.createUser);
 
+// Middleware for authentication
 router.use(auth);
 
+// Get all users route
 router.get("/", userController.getAllUsers);
 
-// Get a single user by ID
-router.get("/:id", userController.getUserById);
+// Get a single user by name route
+router.get("/:customerName", userController.getUserByName);
 
-// Create a new user
+// Update a user by name route
+router.patch("/:customerName", userController.updateUserByName);
 
-// Update a user by ID
-router.patch("/:id", userController.updateUser);
-
-// Delete a user by ID
-router.delete("/:id", userController.deleteUser);
+// Delete a user by name route
+router.delete("/:customerName", userController.deleteUser);
 
 module.exports = router;
