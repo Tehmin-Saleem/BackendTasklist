@@ -1,4 +1,3 @@
-// notificationController.js
 const Notification = require("../models/notificationModel");
 
 // Get all notifications
@@ -11,10 +10,11 @@ exports.getAllNotifications = async (req, res) => {
   }
 };
 
-// Get a single notification by ID
-exports.getNotificationById = async (req, res) => {
+// Get a single notification by user_id
+exports.getNotificationByUserId = async (req, res) => {
+  const { user_id } = req.params;
   try {
-    const notification = await Notification.findById(req.params.id);
+    const notification = await Notification.findOne({ user_id });
     if (notification) {
       res.json(notification);
     } else {
@@ -27,9 +27,12 @@ exports.getNotificationById = async (req, res) => {
 
 // Create a new notification
 exports.createNotification = async (req, res) => {
+  const { user_id, message, type, created_at } = req.body;
   const notification = new Notification({
-    message: req.body.message,
-    // Add other notification properties here
+    user_id,
+    message,
+    type,
+    created_at
   });
 
   try {
@@ -40,12 +43,14 @@ exports.createNotification = async (req, res) => {
   }
 };
 
-// Update a notification by ID
-exports.updateNotification = async (req, res) => {
+// Update a notification by user_id
+exports.updateNotificationByUserId = async (req, res) => {
+  const { user_id } = req.params;
   try {
-    const notification = await Notification.findById(req.params.id);
+    const notification = await Notification.findOne({ user_id });
     if (notification) {
       notification.message = req.body.message || notification.message;
+      notification.type = req.body.type || notification.type;
       // Update other notification properties here
 
       const updatedNotification = await notification.save();
@@ -58,12 +63,12 @@ exports.updateNotification = async (req, res) => {
   }
 };
 
-// Delete a notification by ID
-exports.deleteNotification = async (req, res) => {
+// Delete a notification by user_id
+exports.deleteNotificationByUserId = async (req, res) => {
+  const { user_id } = req.params;
   try {
-    const notification = await Notification.findById(req.params.id);
+    const notification = await Notification.findOneAndDelete({ user_id });
     if (notification) {
-      await notification.remove();
       res.json({ message: "Notification deleted" });
     } else {
       res.status(404).json({ message: "Notification not found" });
