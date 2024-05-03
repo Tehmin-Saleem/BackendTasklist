@@ -16,7 +16,7 @@ exports.getAllUsers = async (req, res) => {
 
 // Get a single user by name
 exports.getUserByName = async (req, res) => {
-  const { customerName } = req.params;
+  const { customerName } = req.query;
   try {
     const user = await User.findOne({ customerName });
     if (user) {
@@ -52,7 +52,7 @@ exports.createUser = async (req, res) => {
 
 // Update a user by name
 exports.updateUserByName = async (req, res) => {
-  const { customerName } = req.params;
+  const { customerName } = req.query;
   try {
     const user = await User.findOne({ customerName });
     if (user) {
@@ -72,7 +72,7 @@ exports.updateUserByName = async (req, res) => {
 
 // Delete a user by name
 exports.deleteUser = async (req, res) => {
-  const { customerName } = req.params;
+  const { customerName } = req.query;
   try {
     const user = await User.findOneAndDelete({ customerName });
     if (user) {

@@ -12,7 +12,7 @@ exports.getAllNotifications = async (req, res) => {
 
 // Get a single notification by user_id
 exports.getNotificationByUserId = async (req, res) => {
-  const { user_id } = req.params;
+  const { user_id } = req.query;
   try {
     const notification = await Notification.findOne({ user_id });
     if (notification) {
@@ -45,7 +45,7 @@ exports.createNotification = async (req, res) => {
 
 // Update a notification by user_id
 exports.updateNotificationByUserId = async (req, res) => {
-  const { user_id } = req.params;
+  const { user_id } = req.query;
   try {
     const notification = await Notification.findOne({ user_id });
     if (notification) {
@@ -65,7 +65,7 @@ exports.updateNotificationByUserId = async (req, res) => {
 
 // Delete a notification by user_id
 exports.deleteNotificationByUserId = async (req, res) => {
-  const { user_id } = req.params;
+  const { user_id } = req.query;
   try {
     const notification = await Notification.findOneAndDelete({ user_id });
     if (notification) {
