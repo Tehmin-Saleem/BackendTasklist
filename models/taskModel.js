@@ -14,7 +14,19 @@ const taskSchema = new mongoose.Schema({
     enum: ["Pending", "Completed", "Rejected"],
     required: true,
   },
-  // Other task properties
+  attachment:{
+    type:String,
+    required:true,
+  },
+  startDate: {
+    type: Date,
+    required: true,
+  },
+  endDate: {
+    type: Date,
+    required: true,
+  },
+ 
 });
 
 module.exports = mongoose.model("Task", taskSchema);
