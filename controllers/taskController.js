@@ -1,4 +1,3 @@
-// taskController.js
 const Task = require("../models/taskModel");
 
 // Get all tasks
@@ -11,10 +10,11 @@ exports.getAllTasks = async (req, res) => {
   }
 };
 
-// Get a single task by ID
-exports.getTaskById = async (req, res) => {
+// Get a single task by title
+exports.getTaskByTitle = async (req, res) => {
+  const { title } = req.params;
   try {
-    const task = await Task.findById(req.params.id);
+    const task = await Task.findOne({ title });
     if (task) {
       res.json(task);
     } else {
@@ -27,11 +27,14 @@ exports.getTaskById = async (req, res) => {
 
 // Create a new task
 exports.createTask = async (req, res) => {
+  const { title, description, status, attachment, startDate, endDate } = req.body;
   const task = new Task({
-    title: req.body.title,
-    description: req.body.description,
-    status:req.body.status
-    // Add other task properties here
+    title,
+    description,
+    status,
+    attachment,
+    startDate,
+    endDate,
   });
 
   try {
@@ -42,14 +45,18 @@ exports.createTask = async (req, res) => {
   }
 };
 
-// Update a task by ID
-exports.updateTask = async (req, res) => {
+// Update a task by title
+exports.updateTaskByTitle = async (req, res) => {
+  const { title } = req.params;
   try {
-    const task = await Task.findById(req.params.id);
+    const task = await Task.findOne({ title });
     if (task) {
       task.title = req.body.title || task.title;
       task.description = req.body.description || task.description;
-      // Update other task properties here
+      task.status = req.body.status || task.status;
+      task.attachment = req.body.attachment || task.attachment;
+      task.startDate = req.body.startDate || task.startDate;
+      task.endDate = req.body.endDate || task.endDate;
 
       const updatedTask = await task.save();
       res.json(updatedTask);
@@ -61,12 +68,12 @@ exports.updateTask = async (req, res) => {
   }
 };
 
-// Delete a task by ID
-exports.deleteTask = async (req, res) => {
+// Delete a task by title
+exports.deleteTaskByTitle = async (req, res) => {
+  const { title } = req.params;
   try {
-    const task = await Task.findById(req.params.id);
+    const task = await Task.findOneAndDelete({ title });
     if (task) {
-      await task.remove();
       res.json({ message: "Task deleted" });
     } else {
       res.status(404).json({ message: "Task not found" });
