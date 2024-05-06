@@ -103,7 +103,7 @@ exports.loginUser = async (req, res) => {
     if (passwordMatch) {
       const token = jwt.sign(
         { userId: user._id, email: user.email },
-        "your-secret-key-youcanothackme2232323@*#*###",
+        "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VySWQiOiI2NjM3N2JhNGM2YjlhYjEwNTUyM2UwZGMiLCJlbWFpbCI6InRlaG1pbmFzYWxlZW1AZ21haWwuY29tIiwiaWF0IjoxNzE0OTEyMTc0LCJleHAiOjE3MTQ5MTU3NzR9._u1N7lSFhZRm3idyeioZ1vBnH3guKFJMJwLtDn4Gu4Q",
         {
           expiresIn: "1h",
         }
