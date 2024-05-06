@@ -12,7 +12,7 @@ exports.getAllTasks = async (req, res) => {
 
 // Get a single task by title
 exports.getTaskByTitle = async (req, res) => {
-  const { title } = req.query;
+  const { title } = req.params;
   try {
     const task = await Task.findOne({ title });
     if (task) {
@@ -38,7 +38,7 @@ exports.createTask = async (req, res) => {
   });
 
   try {
-    const newTask = await task.save();
+    const newTask = await task.save(req.body);
     res.status(201).json(newTask);
   } catch (err) {
     res.status(400).json({ message: err.message });
@@ -47,7 +47,7 @@ exports.createTask = async (req, res) => {
 
 // Update a task by title
 exports.updateTaskByTitle = async (req, res) => {
-  const { title } = req.query;
+  const { title } = req.params;
   try {
     const task = await Task.findOne({ title });
     if (task) {
@@ -70,7 +70,7 @@ exports.updateTaskByTitle = async (req, res) => {
 
 // Delete a task by title
 exports.deleteTaskByTitle = async (req, res) => {
-  const { title } = req.query;
+  const { title } = req.params;
   try {
     const task = await Task.findOneAndDelete({ title });
     if (task) {
