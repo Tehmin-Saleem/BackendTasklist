@@ -9,8 +9,8 @@ router.get("/", taskController.getAllTasks);
 router.get("/:title", taskController.getTaskByTitle);
 
 // Create a new task
-router.post("/", taskController.createTask);
-
+// router.post("/", taskController.createTask);
+router.post("/addTasks", taskController.createTask);
 // Update a task by title
 router.patch("/:title", taskController.updateTaskByTitle);
 

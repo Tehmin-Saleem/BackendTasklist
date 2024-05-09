@@ -9,15 +9,15 @@ const taskSchema = new mongoose.Schema({
     type: String,
     required: true,
   },
-  status: {
-    type: String,
-    enum: ["Pending", "Completed", "Decline"],
-    required: true,
-  },
-  attachment:{
-    type:String,
-    required:true,
-  },
+  // status: {
+  //   type: String,
+  //   enum: ["Pending", "Completed", "Decline"],
+  //   required: true,
+  // },
+  // attachment:{
+  //   type:String,
+    
+  // },
   startDate: {
     type: Date,
     required: true,

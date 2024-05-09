@@ -2,8 +2,8 @@ const express = require("express");
 const router = express.Router();
 const userController = require("../controllers/userController");
 
-const auth = require("../middleware/auth.middleware.js");
-
+// const auth = require("../middleware/auth.middleware.js");
+router.post("/", userController.createUser);
 // Signup route
 router.post("/signup", userController.signupUser);
 
@@ -11,10 +11,10 @@ router.post("/signup", userController.signupUser);
 router.post("/login", userController.loginUser);
 
 // Create a new user route (for regular user creation)
-router.post("/", userController.createUser);
+
 
 // Middleware for authentication
-router.use(auth);
+// router.use(auth);
 
 // Get all users route
 router.get("/", userController.getAllUsers);

@@ -27,12 +27,12 @@ exports.getTaskByTitle = async (req, res) => {
 
 // Create a new task
 exports.createTask = async (req, res) => {
-  const { title, description, status, attachment, startDate, endDate } = req.body;
+  const { title, description,  startDate, endDate } = req.body;
   const task = new Task({
     title,
     description,
-    status,
-    attachment,
+    
+    
     startDate,
     endDate,
   });
