@@ -71,20 +71,20 @@ exports.updateUserByName = async (req, res) => {
 };
 
 
-// Delete a user by name
+// Delete a user by id
 exports.deleteUser = async (req, res) => {
-  const { customerName } = req.params;
-  try {
-    const user = await User.findOneAndDelete({ customerName });
-    if (user) {
-      res.json({ message: "User deleted successfully" });
-    } else {
-      res.status(404).json({ message: "User not found" });
-    }
-  } catch (err) {
-    res.status(500).json({ message: err.message });
+ try{
+  const userId = req.params.id;
+    // Find user by ID and delete
+    await User.findByIdAndDelete(userId);
+    res.status(200).json({ message: 'User deleted successfully.' });
+  } catch (error) {
+    console.error('Error deleting user:', error);
+    res.status(500).json({ error: 'Internal server error' });
   }
 };
+
+ 
 exports.loginUser = async (req, res) => {
   const { email, password } = req.body;
 
@@ -104,7 +104,7 @@ exports.loginUser = async (req, res) => {
     if (passwordMatch) {
       const token = jwt.sign(
         { userId: user._id, email: user.email },
-        "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VySWQiOiI2NjM3N2JhNGM2YjlhYjEwNTUyM2UwZGMiLCJlbWFpbCI6InRlaG1pbmFzYWxlZW1AZ21haWwuY29tIiwiaWF0IjoxNzE0OTEyMTc0LCJleHAiOjE3MTQ5MTU3NzR9._u1N7lSFhZRm3idyeioZ1vBnH3guKFJMJwLtDn4Gu4Q",
+       
         {
           expiresIn: "1h",
         }

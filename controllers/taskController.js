@@ -11,10 +11,10 @@ exports.getAllTasks = async (req, res) => {
 };
 
 // Get a single task by title
-exports.getTaskByTitle = async (req, res) => {
-  const { title } = req.params;
+exports.getTaskById = async (req, res) => {
+  const { id } = req.params;
   try {
-    const task = await Task.findOne({ title });
+    const task = await Task.findOne({ id });
     if (task) {
       res.json(task);
     } else {
@@ -44,12 +44,10 @@ exports.createTask = async (req, res) => {
     res.status(400).json({ message: err.message });
   }
 };
-
-// Update a task by title
-exports.updateTaskByTitle = async (req, res) => {
-  const { title } = req.params;
+exports.updateTaskById = async (req, res) => {
+  const { id } = req.params; // Assuming the ID parameter is passed in the URL
   try {
-    const task = await Task.findOne({ title });
+    const task = await Task.findById(id);
     if (task) {
       task.title = req.body.title || task.title;
       task.description = req.body.description || task.description;
@@ -67,12 +65,11 @@ exports.updateTaskByTitle = async (req, res) => {
     res.status(400).json({ message: err.message });
   }
 };
-
-// Delete a task by title
-exports.deleteTaskByTitle = async (req, res) => {
-  const { title } = req.params;
+// Delete a task 
+exports.deleteTaskById = async (req, res) => {
+  const { id } = req.params; // Assuming the ID parameter is passed in the URL
   try {
-    const task = await Task.findOneAndDelete({ title });
+    const task = await Task.findByIdAndDelete(id);
     if (task) {
       res.json({ message: "Task deleted" });
     } else {
