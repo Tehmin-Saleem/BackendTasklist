@@ -104,7 +104,7 @@ exports.loginUser = async (req, res) => {
     if (passwordMatch) {
       const token = jwt.sign(
         { userId: user._id, email: user.email },
-       
+        "your-secret-key-youcanothackme2232323@*#*###",
         {
           expiresIn: "1h",
         }

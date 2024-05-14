@@ -57,9 +57,9 @@ const usersignupSchema = new mongoose.Schema({
   },
   role: {
     type: String,
-    enum: ['admin', 'end user'], // Define possible roles
-    default: 'end user', // Set default role
-    required: true,
+    enum: ['admin', 'user'], // Define possible roles
+    default: 'admin', // Set default role
+   
   },
 });
 
