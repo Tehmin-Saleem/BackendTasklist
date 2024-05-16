@@ -14,10 +14,10 @@ const taskSchema = new mongoose.Schema({
   //   enum: ["Pending", "Completed", "Decline"],
   //   required: true,
   // },
-  // attachment:{
-  //   type:String,
+  attachment:{
+    type:String,
     
-  // },
+  },
   startDate: {
     type: Date,
     required: true,

@@ -1,7 +1,7 @@
 const express = require("express");
 const router = express.Router();
 const taskController = require("../controllers/taskController");
-
+const {upload}= require ('../index')
 // Get all tasks
 router.get("/", taskController.getAllTasks);
 
@@ -10,7 +10,7 @@ router.get("/:id", taskController.getTaskById);
 
 // Create a new task
 // router.post("/", taskController.createTask);
-router.post("/addTasks", taskController.createTask);
+router.post("/addTasks", upload.single("attachment"),taskController.createTask);
 // Update a task by title
 router.patch("/:id", taskController.updateTaskById);
 

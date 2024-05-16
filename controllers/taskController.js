@@ -27,21 +27,29 @@ exports.getTaskById = async (req, res) => {
 
 // Create a new task
 exports.createTask = async (req, res) => {
-  const { title, description,  startDate, endDate } = req.body;
-  const task = new Task({
-    title,
-    description,
-    
-    
-    startDate,
-    endDate,
-  });
+  const { title, description, startDate, endDate } = req.body;
+  console.log("file", req.file)
 
   try {
-    const newTask = await task.save(req.body);
-    res.status(201).json(newTask);
+    let attachmentPath = ''; // Initialize attachment path variable
+
+    // Check if there is a file attached in the request
+    if (req.file && req.file.path) {
+      attachmentPath = req.file.path; // Set attachment path if file is attached
+    }
+
+    const task = new Task({
+      title,
+      description,
+      attachment: attachmentPath, // Set attachment path in the Task object
+      startDate,
+      endDate,
+    });
+
+    const newTask = await task.save(); // Save the new task
+    res.status(201).json(newTask); // Respond with the newly created task
   } catch (err) {
-    res.status(400).json({ message: err.message });
+    res.status(400).json({ message: err.message }); // Handle errors
   }
 };
 exports.updateTaskById = async (req, res) => {
