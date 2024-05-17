@@ -2,7 +2,7 @@ const express = require('express');
 const connectDB = require('./config/db');
 const corsMiddleware = require('./config/cors');
 const multer = require('multer');
-const path = require('path');
+// const path = require('path');
 const app = express();
 const PORT = process.env.PORT || 3000;
 
